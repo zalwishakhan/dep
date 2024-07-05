@@ -1,0 +1,47 @@
+
+def minimax (board,is_maximizing,comp, player ):
+    
+    if check_winner(board,comp):
+        return 1
+    elif check_winner(board,player):
+        return -1
+    elif check_draw(board):
+        return 0 
+    
+    if is_maximizing :
+        best_score = -float('inf')
+        for key in board.keys():
+            if board[key] ==" ":
+                board[key]= comp
+                score = minimax ( board ,False,comp,player)
+                board[key]= " "
+                best_score= max(score,best_score)
+        return best_score
+    else:
+        best_score= float('inf')
+        for key in board.keys():
+            if board[key] == " ":
+                board[key] = player 
+                score = minimax (board , True,comp , player)
+                board [key]=" "
+            best_score = min(score,best_score) 
+        return best_score
+def comp_move(board , comp , player):
+    best_score = -float('inf')
+    best_move = None
+    for key in board.keys():
+        if board [key]== "":
+            board[key] = comp
+            score = minimax(board,False,comp, player )      
+            board[key]=""
+            if score > best_score:
+                best_score = score
+                best_move = key 
+    board[best_move]=comp            
+    insert_value(best_move , comp)
+    board={"1": " ", "2": "","3":"","4":"","5":"","6":"","7":"","8":"","9":""}
+    comp = 'X'
+    player = 'O'
+    comp_move(board,comp,player)                                              
+                    
+                           
