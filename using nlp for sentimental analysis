@@ -1,0 +1,755 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+pip install seaborn
+import seaborn as sns
+from wordcloud import WordCloud
+import re
+pip install WordCloud
+pip install matplotlib
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+pip install nltk
+# Upgrade scikit-plot
+!pip install --upgrade scikit-plot
+
+# Downgrade scipy
+!pip install scipy==1.7.3
+pip install scikit-plot
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score,precision_score,recall_score,confusion_matrix,roc_curve,classification_report
+pip install scipy==1.7.3
+pip install scikit-plot
+
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+# Load the Iris dataset
+data = load_iris()
+X, y = data.data, data.target
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest model
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Check unique labels in true and predicted values
+unique_y_test = np.unique(y_test)
+unique_y_pred = np.unique(y_pred)
+print("Unique labels in y_test:", unique_y_test)
+print("Unique labels in y_pred:", unique_y_pred)
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred, labels=unique_y_test)
+
+# Plot confusion matrix using sklearn
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=data.target_names)
+disp.plot(cmap=plt.cm.Blues)
+plt.show()
+
+
+
+# Load the Iris dataset
+data = load_iris()
+X, y = data.data, data.target
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest model
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Plot confusion matrix using seaborn
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.target_names, yticklabels=data.target_names)
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.show()
+
+df_train = pd.read_csv(r"C:\Users\Administrator\Desktop\train.txt", delimiter=';', names=['text', 'label'])
+df_test = pd.read_csv(r"C:\Users\Administrator\Desktop\test.txt", delimiter=';', names=['text', 'label'])
+df_val = pd.read_csv(r"C:\Users\Administrator\Desktop\val.txt", delimiter=';', names=['text', 'label'])
+
+df = pd.concat([df_train,df_val])
+df.reset_index(inplace=True,drop=True)
+
+print("Shape of the DataFrame:",df.shape)
+print(df.sample(5))
+sns.countplot(df.label)
+
+def custom_encoder(df):
+    df.replace(to_replace ="surprise", value =1, inplace=True)
+    df.replace(to_replace ="love", value =1, inplace=True)
+    df.replace(to_replace ="joy", value =1, inplace=True)
+    df.replace(to_replace ="fear", value =0, inplace=True)
+    df.replace(to_replace ="anger", value =0, inplace=True)
+    df.replace(to_replace ="sadness", value =0, inplace=True)
+
+custom_encoder(df['label'])
+sns.countplot(df.label)
+lm = WordNetLemmatizer()
+
+def text_transformation(df_col):
+    corpus = []
+    for item in df_col:
+        new_item = re.sub('[^a-zA-Z]',' ',str(item))
+        new_item = new_item.lower()
+        new_item = new_item.split()
+        new_item = [lm.lemmatize(word) for word in new_item if word not in set(stopwords.words('english'))]
+        corpus.append(' '.join(str(x) for x in new_item))
+    return corpus
+import nltk
+nltk.download('stopwords')
+import nltk
+print(nltk.data.path)
+nltk.download('stopwords', download_dir='/path/to/custom/nltk_data')
+nltk.data.path.append('/path/to/custom/nltk_data')
+import nltk
+
+# Download the stopwords corpus
+nltk.download('stopwords')
+
+# Print the NLTK data paths
+print(nltk.data.path)
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
+import string
+
+# Define the text transformation function
+def text_transformation(text_series):
+    # Initialize stopwords
+    stop_words = set(stopwords.words('english'))
+
+    # Example transformation: remove punctuation, lowercasing, and remove stopwords
+    def preprocess(text):
+        text = text.lower()  # Convert to lowercase
+        text = text.translate(str.maketrans('', '', string.punctuation))  # Remove punctuation
+        text = ' '.join([word for word in text.split() if word not in stop_words])  # Remove stopwords
+        return text
+
+    # Apply the preprocessing to the entire series
+    return text_series.apply(preprocess)
+
+# Example usage with a DataFrame
+import pandas as pd
+df = pd.DataFrame({'text': ['This is a sample sentence.', 'Another example sentence.']})
+corpus = text_transformation(df['text'])
+print(corpus)
+
+corpus = text_transformation(df['text'])
+import matplotlib.pyplot as plt
+
+# Set figure size
+plt.rcParams['figure.figsize'] = (20, 8)
+pip install matplotlib
+pip install --upgrade matplotlib
+
+
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+
+# Set figure size
+plt.rcParams['figure.figsize'] = (20, 8)
+
+# Create a word cloud
+word_cloud_text = "example word cloud text for visualization"
+wordcloud = WordCloud(width=800, height=400).generate(word_cloud_text)
+
+# Display the word cloud
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.show()
+plt.rcParams['figure.figsize'] = 20,8
+word_cloud = ""
+for row in corpus:
+    for word in row:
+        word_cloud+=" ".join(word)
+wordcloud = WordCloud(width = 1000, height = 500,background_color ='white',min_font_size = 10).generate(word_cloud)
+plt.imshow(wordcloud)
+from sklearn.feature_extraction.text import CountVectorizer
+print(df.columns)
+df = pd.read_csv("train.txt", delimiter=';', names=['text', 'label'])
+print(df.head())
+cv = CountVectorizer(ngram_range=(1,2))
+traindata = cv.fit_transform(corpus)
+X = traindata
+y = df.label
+parameters = {'max_features': ('auto','sqrt'),
+             'n_estimators': [500, 1000, 1500],
+             'max_depth': [5, 10, None],
+             'min_samples_split': [5, 10, 15],
+             'min_samples_leaf': [1, 2, 5, 10],
+             'bootstrap': [True, False]}
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+
+print(X.shape)
+print(len(y))
+# Assuming df is your DataFrame and it has columns 'text' and 'label'
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Transform text data into feature vectors
+cv = CountVectorizer(ngram_range=(1,2))
+X = cv.fit_transform(df['text'])
+
+# Extract target labels
+y = df['label']
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+grid_search.fit(X_train, y_train)
+y = df['label'].values
+grid_search = GridSearchCV(RandomForestClassifier(),parameters,cv=5,return_train_score=True,n_jobs=-1)
+grid_search.fit(X,y)
+grid_search.best_params_
+# Check the length of the cv_results_ dictionary
+print("Number of parameter combinations tested:", len(grid_search.cv_results_['params']))
+num_combinations = len(grid_search.cv_results_['params'])
+for i in range(num_combinations):
+    print('Parameters: ', grid_search.cv_results_['params'][i])
+    print('Mean Test Score: ', grid_search.cv_results_['mean_test_score'][i])
+    print('Rank: ', grid_search.cv_results_['rank_test_score'][i])
+
+# Check if the grid search has been fitted and has results
+if hasattr(grid_search, 'cv_results_'):
+    print("Grid Search Results are available.")
+else:
+    print("Grid Search Results are not available. Please ensure that GridSearchCV has been fitted properly.")
+# Check the number of parameter combinations
+num_combinations = len(grid_search.cv_results_['params'])
+
+# Iterate over the results
+for i in range(num_combinations):
+    print('Parameters: ', grid_search.cv_results_['params'][i])
+    print('Mean Test Score: ', grid_search.cv_results_['mean_test_score'][i])
+    print('Rank: ', grid_search.cv_results_['rank_test_score'][i])
+    print()  # For better readability
+print("Best Parameters:", grid_search.best_params_)
+# Check the parameters that were tested
+print("Parameters tested:", grid_search.cv_results_['params'])
+parameters = {
+    'max_features': [None, 'auto'],
+    'max_depth': [10, 20],
+    'n_estimators': [50, 100],
+    'min_samples_split': [2, 5],
+    'min_samples_leaf': [1, 2],
+    'bootstrap': [True, False]
+}
+from sklearn.ensemble import RandomForestClassifier
+
+# Print best parameters to verify
+print("Best Parameters:", grid_search.best_params_)
+
+# Initialize RandomForestClassifier with best parameters
+rfc = RandomForestClassifier(
+    max_features=grid_search.best_params_.get('max_features', 'sqrt'),  # Use 'sqrt' or 'log2' as default if not present
+    max_depth=grid_search.best_params_.get('max_depth', None),
+    n_estimators=grid_search.best_params_.get('n_estimators', 100),
+    min_samples_split=grid_search.best_params_.get('min_samples_split', 2),
+    min_samples_leaf=grid_search.best_params_.get('min_samples_leaf', 1),
+    bootstrap=grid_search.best_params_.get('bootstrap', True)
+)
+
+# Fit the model
+rfc.fit(X, y)
+test_df = pd.read_csv('test.txt',delimiter=';',names=['text','label'])
+from sklearn.preprocessing import LabelEncoder
+
+def custom_encoder(labels):
+    encoder = LabelEncoder()
+    return encoder.fit_transform(labels)
+X_test,y_test = test_df.text,test_df.label
+#encode the labels into two classes , 0 and 1
+test_df = custom_encoder(y_test)
+#pre-processing of text
+test_corpus = text_transformation(X_test)
+#convert text data into vectors
+testdata = cv.transform(test_corpus)
+#predict the target
+predictions = rfc.predict(testdata)
+from sklearn.metrics import roc_curve
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+
+# Binarize the output labels
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2])  # Adjust classes based on your data
+n_classes = y_test_bin.shape[1]
+
+# Predict probabilities
+predictions_probability = rfc.predict_proba(testdata)
+
+# Plot ROC curve for each class
+plt.figure()
+for i in range(n_classes):
+    fpr, tpr, _ = roc_curve(y_test_bin[:, i], predictions_probability[:, i])
+    plt.plot(fpr, tpr, label=f'ROC curve of class {i} (area = {auc(fpr, tpr):.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+plt.show()
+
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from wordcloud import WordCloud
+import re
+pip install WordCloud
+pip install matplotlib
+
+pip install seaborn
+import nltk
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+pip install nltk
+# Upgrade scikit-plot
+!pip install --upgrade scikit-plot
+
+# Downgrade scipy
+!pip install scipy==1.7.3
+
+pip install scikit-plot
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score,precision_score,recall_score,confusion_matrix,roc_curve,classification_report
+
+pip install scipy==1.7.3
+
+pip install scikit-plot
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+
+# Load the Iris dataset
+data = load_iris()
+X, y = data.data, data.target
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest model
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Check unique labels in true and predicted values
+unique_y_test = np.unique(y_test)
+unique_y_pred = np.unique(y_pred)
+print("Unique labels in y_test:", unique_y_test)
+print("Unique labels in y_pred:", unique_y_pred)
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred, labels=unique_y_test)
+
+# Plot confusion matrix using sklearn
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=data.target_names)
+disp.plot(cmap=plt.cm.Blues)
+plt.show()
+
+
+
+
+# Load the Iris dataset
+data = load_iris()
+X, y = data.data, data.target
+
+# Split into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Train a Random Forest model
+model = RandomForestClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Predict on the test set
+y_pred = model.predict(X_test)
+
+# Compute confusion matrix
+cm = confusion_matrix(y_test, y_pred)
+
+# Plot confusion matrix using seaborn
+sns.heatmap(cm, annot=True, fmt='d', cmap='Blues', xticklabels=data.target_names, yticklabels=data.target_names)
+plt.xlabel('Predicted Labels')
+plt.ylabel('True Labels')
+plt.show()
+
+df_train = pd.read_csv(r"C:\Users\Administrator\Desktop\train.txt", delimiter=';', names=['text', 'label'])
+df_test = pd.read_csv(r"C:\Users\Administrator\Desktop\test.txt", delimiter=';', names=['text', 'label'])
+df_val = pd.read_csv(r"C:\Users\Administrator\Desktop\val.txt", delimiter=';', names=['text', 'label'])
+df = pd.concat([df_train,df_val])
+df.reset_index(inplace=True,drop=True)
+
+print("Shape of the DataFrame:",df.shape)
+print(df.sample(5))
+sns.countplot(df.label)
+def custom_encoder(df):
+    df.replace(to_replace ="surprise", value =1, inplace=True)
+    df.replace(to_replace ="love", value =1, inplace=True)
+    df.replace(to_replace ="joy", value =1, inplace=True)
+    df.replace(to_replace ="fear", value =0, inplace=True)
+    df.replace(to_replace ="anger", value =0, inplace=True)
+    df.replace(to_replace ="sadness", value =0, inplace=True)
+custom_encoder(df['label'])
+
+sns.countplot(df.label)
+lm = WordNetLemmatizer()
+def text_transformation(df_col):
+    corpus = []
+    for item in df_col:
+        new_item = re.sub('[^a-zA-Z]',' ',str(item))
+        new_item = new_item.lower()
+        new_item = new_item.split()
+        new_item = [lm.lemmatize(word) for word in new_item if word not in set(stopwords.words('english'))]
+        corpus.append(' '.join(str(x) for x in new_item))
+    return corpus
+import nltk
+nltk.download('stopwords')
+
+import nltk
+print(nltk.data.path)
+
+nltk.download('stopwords', download_dir='/path/to/custom/nltk_data')
+nltk.data.path.append('/path/to/custom/nltk_data')
+
+import nltk
+
+# Download the stopwords corpus
+nltk.download('stopwords')
+
+# Print the NLTK data paths
+print(nltk.data.path)
+
+from sklearn.feature_extraction.text import TfidfVectorizer
+from nltk.corpus import stopwords
+import string
+
+# Define the text transformation function
+def text_transformation(text_series):
+    # Initialize stopwords
+    stop_words = set(stopwords.words('english'))
+
+    # Example transformation: remove punctuation, lowercasing, and remove stopwords
+    def preprocess(text):
+        text = text.lower()  # Convert to lowercase
+        text = text.translate(str.maketrans('', '', string.punctuation))  # Remove punctuation
+        text = ' '.join([word for word in text.split() if word not in stop_words])  # Remove stopwords
+        return text
+
+    # Apply the preprocessing to the entire series
+    return text_series.apply(preprocess)
+
+# Example usage with a DataFrame
+import pandas as pd
+df = pd.DataFrame({'text': ['This is a sample sentence.', 'Another example sentence.']})
+corpus = text_transformation(df['text'])
+print(corpus)
+
+corpus = text_transformation(df['text'])
+import matplotlib.pyplot as plt
+
+# Set figure size
+plt.rcParams['figure.figsize'] = (20, 8)
+
+pip install matplotlib
+pip install --upgrade matplotlib
+
+
+
+import matplotlib.pyplot as plt
+from wordcloud import WordCloud
+
+# Set figure size
+plt.rcParams['figure.figsize'] = (20, 8)
+
+# Create a word cloud
+word_cloud_text = "example word cloud text for visualization"
+wordcloud = WordCloud(width=800, height=400).generate(word_cloud_text)
+
+# Display the word cloud
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis('off')
+plt.show()
+
+plt.rcParams['figure.figsize'] = 20,8
+word_cloud = ""
+for row in corpus:
+    for word in row:
+        word_cloud+=" ".join(word)
+wordcloud = WordCloud(width = 1000, height = 500,background_color ='white',min_font_size = 10).generate(word_cloud)
+plt.imshow(wordcloud)
+from sklearn.feature_extraction.text import CountVectorizer
+
+print(df.columns)
+
+df = pd.read_csv("train.txt", delimiter=';', names=['text', 'label'])
+print(df.head())
+
+cv = CountVectorizer(ngram_range=(1,2))
+traindata = cv.fit_transform(corpus)
+X = traindata
+y = df.label
+
+parameters = {'max_features': ('auto','sqrt'),
+             'n_estimators': [500, 1000, 1500],
+             'max_depth': [5, 10, None],
+             'min_samples_split': [5, 10, 15],
+             'min_samples_leaf': [1, 2, 5, 10],
+             'bootstrap': [True, False]}
+from sklearn.model_selection import GridSearchCV
+from sklearn.ensemble import RandomForestClassifier
+
+
+print(X.shape)
+print(len(y))
+
+# Assuming df is your DataFrame and it has columns 'text' and 'label'
+from sklearn.feature_extraction.text import CountVectorizer
+
+# Transform text data into feature vectors
+cv = CountVectorizer(ngram_range=(1,2))
+X = cv.fit_transform(df['text'])
+
+# Extract target labels
+y = df['label']
+
+from sklearn.model_selection import train_test_split
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+grid_search.fit(X_train, y_train)
+
+y = df['label'].values
+
+grid_search = GridSearchCV(RandomForestClassifier(),parameters,cv=5,return_train_score=True,n_jobs=-1)
+grid_search.fit(X,y)
+grid_search.best_params_
+# Check the length of the cv_results_ dictionary
+print("Number of parameter combinations tested:", len(grid_search.cv_results_['params']))
+
+num_combinations = len(grid_search.cv_results_['params'])
+for i in range(num_combinations):
+    print('Parameters: ', grid_search.cv_results_['params'][i])
+    print('Mean Test Score: ', grid_search.cv_results_['mean_test_score'][i])
+    print('Rank: ', grid_search.cv_results_['rank_test_score'][i])
+
+# Check if the grid search has been fitted and has results
+if hasattr(grid_search, 'cv_results_'):
+    print("Grid Search Results are available.")
+else:
+    print("Grid Search Results are not available. Please ensure that GridSearchCV has been fitted properly.")
+
+# Check the number of parameter combinations
+num_combinations = len(grid_search.cv_results_['params'])
+
+# Iterate over the results
+for i in range(num_combinations):
+    print('Parameters: ', grid_search.cv_results_['params'][i])
+    print('Mean Test Score: ', grid_search.cv_results_['mean_test_score'][i])
+    print('Rank: ', grid_search.cv_results_['rank_test_score'][i])
+    print()  # For better readability
+
+print("Best Parameters:", grid_search.best_params_)
+
+# Check the parameters that were tested
+print("Parameters tested:", grid_search.cv_results_['params'])
+
+parameters = {
+    'max_features': [None, 'auto'],
+    'max_depth': [10, 20],
+    'n_estimators': [50, 100],
+    'min_samples_split': [2, 5],
+    'min_samples_leaf': [1, 2],
+    'bootstrap': [True, False]
+}
+
+# Print the available keys in best_params_
+print(grid_search.best_params_)
+
+from sklearn.ensemble import RandomForestClassifier
+
+# Print best parameters to verify
+print("Best Parameters:", grid_search.best_params_)
+
+# Initialize RandomForestClassifier with best parameters
+rfc = RandomForestClassifier(
+    max_features=grid_search.best_params_.get('max_features', 'sqrt'),  # Use 'sqrt' or 'log2' as default if not present
+    max_depth=grid_search.best_params_.get('max_depth', None),
+    n_estimators=grid_search.best_params_.get('n_estimators', 100),
+    min_samples_split=grid_search.best_params_.get('min_samples_split', 2),
+    min_samples_leaf=grid_search.best_params_.get('min_samples_leaf', 1),
+    bootstrap=grid_search.best_params_.get('bootstrap', True)
+)
+
+# Fit the model
+rfc.fit(X, y)
+
+parameters = {
+    'n_estimators': [100, 200],
+    'max_depth': [None, 10, 20],
+    'max_features': ['sqrt', 'log2', None],  # Use valid values here
+    'min_samples_split': [2, 5],
+    'min_samples_leaf': [1, 2],
+    'bootstrap': [True, False]
+}
+
+test_df = pd.read_csv('test.txt',delimiter=';',names=['text','label'])
+from sklearn.preprocessing import LabelEncoder
+
+def custom_encoder(labels):
+    encoder = LabelEncoder()
+    return encoder.fit_transform(labels)
+
+X_test,y_test = test_df.text,test_df.label
+#encode the labels into two classes , 0 and 1
+test_df = custom_encoder(y_test)
+#pre-processing of text
+test_corpus = text_transformation(X_test)
+#convert text data into vectors
+testdata = cv.transform(test_corpus)
+#predict the target
+predictions = rfc.predict(testdata)
+from sklearn.metrics import roc_curve
+
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import roc_curve, auc
+import matplotlib.pyplot as plt
+
+# Binarize the output labels
+y_test_bin = label_binarize(y_test, classes=[0, 1, 2])  # Adjust classes based on your data
+n_classes = y_test_bin.shape[1]
+
+# Predict probabilities
+predictions_probability = rfc.predict_proba(testdata)
+
+# Plot ROC curve for each class
+plt.figure()
+for i in range(n_classes):
+    fpr, tpr, _ = roc_curve(y_test_bin[:, i], predictions_probability[:, i])
+    plt.plot(fpr, tpr, label=f'ROC curve of class {i} (area = {auc(fpr, tpr):.2f})')
+
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+plt.show()
+
+
+fpr, tpr, _ = roc_curve(y_test_bin[:, 0], predictions_probability[:, 0])
+plt.plot(fpr, tpr, label='ROC curve for class 0 (area = %0.2f)' % auc(fpr, tpr))
+plt.plot([0, 1], [0, 1], 'k--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+plt.show()
+
+predictions_probability = rfc.predict_proba(testdata)
+fpr,tpr,thresholds = roc_curve(y_test,predictions_probability[:,1])
+plt.plot(fpr,tpr)
+plt.plot([0,1])
+plt.title('ROC Curve')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.show()
+def expression_check(prediction_input):
+    if prediction_input == 0:
+        print("Input statement has Negative Sentiment.")
+    elif prediction_input == 1:
+        print("Input statement has Positive Sentiment.")
+    else:
+        print("Invalid Statement.")
+def sentiment_predictor(input):
+    input = text_transformation(input)
+    transformed_input = cv.transform(input)
+    prediction = rfc.predict(transformed_input)
+    expression_check(prediction)
+input1 = ["Sometimes I just want to punch someone in the face."]
+input2 = ["I bought a new phone and it's so good."]
+sentiment_predictor(input1)
+sentiment_predictor(input2)
+def expression_check(prediction_input):
+    if prediction_input == 0:
+        print("Input statement has Negative Sentiment.")
+    elif prediction_input == 1:
+        print("Input statement has Positive Sentiment.")
+    else:
+        print("Invalid Statement.")
+def sentiment_predictor(input):
+    input = text_transformation(input)
+    transformed_input = cv.transform(input)
+    prediction = rfc.predict(transformed_input)
+    expression_check(prediction)
+input1 = ["Sometimes I just want to punch someone in the face."]
+input2 = ["I bought a new phone and it's so good."]
+import pandas as pd
+
+def text_transformation(text_series):
+    # Ensure text_series is a Pandas Series
+    if isinstance(text_series, list):
+        text_series = pd.Series(text_series)
+    
+    def preprocess(text):
+        # Your text preprocessing steps here
+        return text
+    
+    # Apply preprocessing to the entire series
+    return text_series.apply(preprocess)
+
+def sentiment_predictor(input):
+    input = text_transformation(input)
+    transformed_input = cv.transform(input)
+    prediction = rfc.predict(transformed_input)
+    return prediction
+
+# Example usage
+input1 = ["sample text 1", "sample text 2"]
+input2 = ["another example text"]
+print(sentiment_predictor(input1))
+print(sentiment_predictor(input2))
+
+sentiment_predictor(input1)
+sentiment_predictor(input2)
+
+
+
+
+
+
+
